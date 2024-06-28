@@ -18,6 +18,9 @@ inputs:
     description: ''
     required: false
     default: 'sts.amazonaws.com'
+outputs:
+  website-url:
+    description: 'The URL of '
 runs:
   using: 'node16'
   main: 'main.js'
