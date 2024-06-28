@@ -67,4 +67,5 @@ jobs:
         with:
           bucket: gha-custom-action-fredydlemus
           dist-foler: ./dist
+          role-arn: ${{secrets.AWS_ROLE_TO_ASSUME}}
           # bucket-region: us-east-2
