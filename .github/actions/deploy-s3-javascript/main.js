@@ -11,18 +11,23 @@ async function run() {
 
         core.info(`Assuming role: ${roleArn}`);
         let assumeRoleOutput = '';
+        let assumeRoleError = '';
         await exec.exec(`aws sts assume-role --role-arn ${roleArn} --role-session-name deploy-s3-javascript-action`, [], {
             listeners: {
                 stdout: (data) => {
                     assumeRoleOutput += data.toString();
                 },
                 stderr: (data) => {
-                    core.error(data.toString());
+                    assumeRoleError += data.toString();
                 }
             }
         });
 
         core.info(`Assume role output: ${assumeRoleOutput}`);
+        if (assumeRoleError) {
+            core.error(`Assume role error: ${assumeRoleError}`);
+            throw new Error(assumeRoleError);
+        }
     
         let credentials = '';
         core.info('Getting session token...');
