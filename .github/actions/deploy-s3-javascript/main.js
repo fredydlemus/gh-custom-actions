@@ -51,9 +51,9 @@ async function run() {
         // core.info(`Session token output: ${credentials}`);
     
         const creds = JSON.parse(assumeRoleOutput);
-        const accessKeyId = assumeRoleOutput.Credentials.AccessKeyId;
-        const secretAccessKey = assumeRoleOutput.Credentials.SecretAccessKey;
-        const sessionToken = assumeRoleOutput.Credentials.SessionToken;
+        const accessKeyId = creds.Credentials.AccessKeyId;
+        const secretAccessKey = creds.Credentials.SecretAccessKey;
+        const sessionToken = creds.Credentials.SessionToken;
     
         core.exportVariable('AWS_ACCESS_KEY_ID', accessKeyId);
         core.exportVariable('AWS_SECRET_ACCESS_KEY', secretAccessKey);
