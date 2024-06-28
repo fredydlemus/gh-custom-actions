@@ -9,6 +9,8 @@ async function run() {
         const distFolder = core.getInput('dist-folder', {required: true});
         const roleArn = core.getInput('role-arn', {required: true});
 
+        core.exportVariable('AWS_REGION', bucketRegion);
+
         core.info(`Assuming role: ${roleArn}`);
         let assumeRoleOutput = '';
         let assumeRoleError = '';
