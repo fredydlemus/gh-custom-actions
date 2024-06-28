@@ -66,6 +66,6 @@ jobs:
         uses: ./.github/actions/deploy-s3-javascript
         with:
           bucket: gha-custom-action-fredydlemus
-          dist-foler: ./dist
+          dist-folder: ./dist
           role-arn: ${{secrets.AWS_ROLE_TO_ASSUME}}
           # bucket-region: us-east-2
