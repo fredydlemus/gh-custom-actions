@@ -12,7 +12,7 @@ async function run() {
         core.info(`Assuming role: ${roleArn}`);
         let assumeRoleOutput = '';
         let assumeRoleError = '';
-        await exec.exec(`aws sts assume-role --role-arn ${roleArn} --role-session-name deploy-s3-javascript-action`, [], {
+        await exec.exec(`aws sts assume-role --role-arn ${roleArn} --role-session-name deploy-s3-javascript-action --debug`, [], {
             listeners: {
                 stdout: (data) => {
                     assumeRoleOutput += data.toString();
