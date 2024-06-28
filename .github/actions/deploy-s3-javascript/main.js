@@ -50,7 +50,7 @@ async function run() {
 
         // core.info(`Session token output: ${credentials}`);
     
-        // const creds = JSON.parse(credentials);
+        const creds = JSON.parse(assumeRoleOutput);
         const accessKeyId = assumeRoleOutput.Credentials.AccessKeyId;
         const secretAccessKey = assumeRoleOutput.Credentials.SecretAccessKey;
         const sessionToken = assumeRoleOutput.Credentials.SessionToken;
