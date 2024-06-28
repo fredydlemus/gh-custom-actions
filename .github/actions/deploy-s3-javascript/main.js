@@ -12,6 +12,9 @@ async function run() {
 
         core.exportVariable('AWS_REGION', bucketRegion);
 
+        core.info('Fetching OIDC token...');
+        const idToken = await core.getIDToken(oidcAudience);
+
         core.info(`Assuming role: ${roleArn}`);
         let assumeRoleOutput = '';
         let assumeRoleError = '';
