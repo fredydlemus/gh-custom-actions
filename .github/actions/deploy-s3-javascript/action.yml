@@ -14,6 +14,10 @@ inputs:
   role-arn:
     description: 'The ARN of the IAM role to assume'
     required: true
+  oidc-audience:
+    description: ''
+    required: false
+    default: 'sts.amazonaws.com'
 runs:
   using: 'node16'
   main: 'main.js'

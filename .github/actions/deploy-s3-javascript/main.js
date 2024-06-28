@@ -8,13 +8,14 @@ async function run() {
         const bucketRegion = core.getInput('bucket-region', {required: true});
         const distFolder = core.getInput('dist-folder', {required: true});
         const roleArn = core.getInput('role-arn', {required: true});
+        const oidcAudience = core.getInput('oidc-audience', {required: true});
 
         core.exportVariable('AWS_REGION', bucketRegion);
 
         core.info(`Assuming role: ${roleArn}`);
         let assumeRoleOutput = '';
         let assumeRoleError = '';
-        await exec.exec(`aws sts assume-role --role-arn ${roleArn} --role-session-name deploy-s3-javascript-action --debug`, [], {
+        await exec.exec(`aws sts assume-role-with-web-identity --role-arn ${roleArn} --role-session-name deploy-s3-javascript-action --web-identity-token ${idToken} --duration-seconds 3600`, [], {
             listeners: {
                 stdout: (data) => {
                     assumeRoleOutput += data.toString();
