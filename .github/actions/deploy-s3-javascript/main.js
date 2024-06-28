@@ -35,25 +35,25 @@ async function run() {
             throw new Error(assumeRoleError);
         }
     
-        let credentials = '';
-        core.info('Getting session token...');
-        await exec.exec(`aws sts get-session-token`, [], {
-            listeners: {
-                stdout: (data) => {
-                    credentials += data.toString();
-                },
-                stderr: (data) =>{
-                    core.error(data.toString());
-                }
-            },
-        });
+        // let credentials = '';
+        // core.info('Getting session token...');
+        // await exec.exec(`aws sts get-session-token`, [], {
+        //     listeners: {
+        //         stdout: (data) => {
+        //             credentials += data.toString();
+        //         },
+        //         stderr: (data) =>{
+        //             core.error(data.toString());
+        //         }
+        //     },
+        // });
 
         core.info(`Session token output: ${credentials}`);
     
-        const creds = JSON.parse(credentials);
-        const accessKeyId = creds.Credentials.AccessKeyId;
-        const secretAccessKey = creds.Credentials.SecretAccessKey;
-        const sessionToken = creds.Credentials.SessionToken;
+        // const creds = JSON.parse(credentials);
+        const accessKeyId = assumeRoleOutput.Credentials.AccessKeyId;
+        const secretAccessKey = assumeRoleOutput.Credentials.SecretAccessKey;
+        const sessionToken = assumeRoleOutput.Credentials.SessionToken;
     
         core.exportVariable('AWS_ACCESS_KEY_ID', accessKeyId);
         core.exportVariable('AWS_SECRET_ACCESS_KEY', secretAccessKey);
