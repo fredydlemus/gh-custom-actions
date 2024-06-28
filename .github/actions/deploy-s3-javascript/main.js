@@ -12,7 +12,7 @@ async function run() {
         await exec.exec(`aws sts assume-role --role-arn ${roleArn} --role-session-name deploy-s3-javascript-action`);
     
         let credentials = '';
-        exec.exec(`aws sts get-session-token`, [], {
+        await exec.exec(`aws sts get-session-token`, [], {
             listeners: {
                 stdout: (data) => {
                     credentials += data.toString();
@@ -30,7 +30,7 @@ async function run() {
         core.exportVariable('AWS_SESSION_TOKEN', sessionToken);
     
         const s3Uri = `s3://${bucket}`;
-        exec.exec(`aws s3 sync ${distFolder} ${s3Uri} --region ${bucketRegion}`)
+        await exec.exec(`aws s3 sync ${distFolder} ${s3Uri} --region ${bucketRegion}`)
     
         core.notice('Hello from my custom Javascript Action!');
     }
