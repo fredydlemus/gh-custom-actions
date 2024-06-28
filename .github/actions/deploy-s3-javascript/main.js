@@ -8,17 +8,36 @@ async function run() {
         const bucketRegion = core.getInput('bucket-region', {required: true});
         const distFolder = core.getInput('dist-folder', {required: true});
         const roleArn = core.getInput('role-arn', {required: true});
-    
-        await exec.exec(`aws sts assume-role --role-arn ${roleArn} --role-session-name deploy-s3-javascript-action`);
+
+        core.info(`Assuming role: ${roleArn}`);
+        let assumeRoleOutput = '';
+        await exec.exec(`aws sts assume-role --role-arn ${roleArn} --role-session-name deploy-s3-javascript-action`, [], {
+            listeners: {
+                stdout: (data) => {
+                    assumeRoleOutput += data.toString();
+                },
+                stderr: (data) => {
+                    core.error(data.toString());
+                }
+            }
+        });
+
+        core.info(`Assume role output: ${assumeRoleOutput}`);
     
         let credentials = '';
+        core.info('Getting session token...');
         await exec.exec(`aws sts get-session-token`, [], {
             listeners: {
                 stdout: (data) => {
                     credentials += data.toString();
+                },
+                stderr: (data) =>{
+                    core.error(data.toString());
                 }
             },
         });
+
+        core.info(`Session token output: ${credentials}`);
     
         const creds = JSON.parse(credentials);
         const accessKeyId = creds.Credentials.AccessKeyId;
@@ -30,7 +49,17 @@ async function run() {
         core.exportVariable('AWS_SESSION_TOKEN', sessionToken);
     
         const s3Uri = `s3://${bucket}`;
-        await exec.exec(`aws s3 sync ${distFolder} ${s3Uri} --region ${bucketRegion}`)
+        core.info(`Syncing folder ${distFolder} to ${s3Uri}`);
+        await exec.exec(`aws s3 sync ${distFolder} ${s3Uri} --region ${bucketRegion}`, [], {
+            listeners: {
+                stdout:(data) => {
+                    core.info(data.toString());
+                },
+                stderr: (data) => {
+                    core.error(data.toString());
+                }
+            }
+        })
     
         core.notice('Hello from my custom Javascript Action!');
     }
